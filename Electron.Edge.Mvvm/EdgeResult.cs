@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Coldstone
+﻿namespace Electron.Edge.Mvvm
 {
-    class EdgeResult
+    public class EdgeResult
     {
-        public bool ok;
-        public object result;
+        // These properties can be accessed from JavaScript to check result
+        public bool ok { get; set; }
+        public object result { get; set; }
 
         public static object Ok(object result)
         {
-            return new EdgeResult()
+            return new EdgeResult
             {
                 ok = true,
                 result = result
@@ -22,7 +17,7 @@ namespace Coldstone
 
         public static object NotOk(object result)
         {
-            return new EdgeResult()
+            return new EdgeResult
             {
                 ok = false,
                 result = result

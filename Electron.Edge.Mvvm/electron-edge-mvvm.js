@@ -9,50 +9,50 @@ module.exports = function (pathToDll) {
 
         //public Task<object> Initialize(dynamic obj);
         var _initialize = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "Initialize"
         });
 
         //public Task<object> CreateViewModel(dynamic obj);
         var _createViewModel = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "CreateViewModel"
         });
 
         //public Task<object> GetPropertyValue(dynamic obj);
         var _getPropertyValue = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "GetPropertyValue"
         });
 
         //public Task<object> GetPropertyAsViewModel(dynamic obj);
         var _getPropertyAsViewModel = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "GetPropertyAsViewModel"
         });
 
         //public Task<object> SetPropertyValue(dynamic obj);
         var _setPropertyValue = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "SetPropertyValue"
         });
 
         //public Task<object> BindToProperty(dynamic obj);
         var _bindToProperty = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "BindToProperty"
         });
 
         //public Task<object> ExecuteCommand(dynamic obj);
         var _executeCommand = edge.func({
-            assemblyFile: _dirName + "/Coldstone.dll",
-            typeName: 'Coldstone.EdgeBinder',
+            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: 'Electron.Edge.Mvvm.EdgeBinder',
             methodName: "ExecuteCommand"
         });
 
@@ -185,14 +185,3 @@ module.exports = function (pathToDll) {
         }
     };
 }
-
-
-
-
-
-
-
-
-
-
-

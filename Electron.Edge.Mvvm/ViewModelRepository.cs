@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Coldstone
+namespace Electron.Edge.Mvvm
 {
-    class ViewModelRepository
+    public class ViewModelRepository
     {
-        private static Dictionary<string, ViewModel> _viewModels = new Dictionary<string, ViewModel>();
+        private static readonly Dictionary<string, ViewModel> ViewModels = new Dictionary<string, ViewModel>();
 
-        private Assembly _assembly;
+        private readonly Assembly assembly;
 
         public ViewModelRepository(Assembly assembly)
         {
-            this._assembly = assembly;
+            this.assembly = assembly;
         }
 
         public ViewModel Create(string name)
         {
-            var type = _assembly.GetType(name);
+            var type = assembly.GetType(name);
             var instance = Activator.CreateInstance(type);
             var vm = new ViewModel(instance);
-            _viewModels[vm.GetHashCode().ToString()] = vm;
+            ViewModels[vm.GetHashCode().ToString()] = vm;
             return vm;
         }
 
@@ -34,15 +31,14 @@ namespace Coldstone
 
         public void Add(ViewModel vm)
         {
-            _viewModels[vm.GetHashCode().ToString()] = vm;
+            ViewModels[vm.GetHashCode().ToString()] = vm;
         }
 
         public ViewModel GetViewModel(string id)
         {
-            if (!_viewModels.ContainsKey(id))
-                return null;
+            if (!ViewModels.ContainsKey(id)) return null;
 
-            return _viewModels[id];
+            return ViewModels[id];
         }
     }
 }

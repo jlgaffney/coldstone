@@ -7,10 +7,11 @@
     <ProjectGuid>{CBC3B215-4D05-4B71-9E65-BC3149D278BB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Coldstone</RootNamespace>
-    <AssemblyName>Coldstone</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Electron.Edge.Mvvm</RootNamespace>
+    <AssemblyName>Electron.Edge.Mvvm</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,13 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinderCore.cs" />
@@ -47,7 +43,7 @@
     <Compile Include="ViewModelRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="coldstone.js">
+    <Content Include="electron-edge-mvvm.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
