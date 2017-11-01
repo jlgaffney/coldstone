@@ -59,14 +59,16 @@ namespace Electron.Edge.Mvvm
         {
             return Task.Factory.StartNew(() =>
             {
+                if (function == null) return Result.NotOk("Function cannot be null!");
+
                 try
                 {
-                    var result = function.Invoke();
+                    var result = function();
                     return Result.Ok(result);
                 }
                 catch (Exception ex)
                 {
-                    return Result.NotOk(ex.Message);
+                    return Result.NotOk(ex.ToString());
                 }
             });
         }

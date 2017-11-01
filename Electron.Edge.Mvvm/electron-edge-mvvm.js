@@ -75,7 +75,12 @@ module.exports = function (pathToDll) {
         }
     };
 
-    var result = check(_eb.initialize({ path: pathToDll }, true));
+    try {
+        var result = check(_eb.initialize({ path: pathToDll }, true));
+    }
+    catch (err) {
+        throw "Initialization failed!" + err;
+    }
 
     var ViewModel = function (id) {
         var self = this;

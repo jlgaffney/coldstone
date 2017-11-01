@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 
 namespace Electron.Edge.Mvvm
@@ -13,27 +14,32 @@ namespace Electron.Edge.Mvvm
 
         public BinderCore()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += LoadFromSameFolder;
+            AssemblyLoadContext.Default.Resolving += TryLoadFromSameFolder;
         }
 
-        private static Assembly LoadFromSameFolder(object sender, ResolveEventArgs args)
+        private static Assembly TryLoadFromSameFolder(AssemblyLoadContext context, AssemblyName assemblyName)
         {
-            var folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var folderPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-            if (string.IsNullOrEmpty(folderPath)) return null;
+            var assemblyPath = Path.Combine(folderPath, assemblyName.Name + "." + DynamicLinkLibraryExtension);
 
-            var assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + "." + DynamicLinkLibraryExtension);
-
-            if (!File.Exists(assemblyPath)) return null;
-
-            return Assembly.LoadFrom(assemblyPath);
+            return File.Exists(assemblyPath) ? context.LoadFromAssemblyPath(assemblyPath) : null;
         }
 
-        public object Initialize(string assemblyPath)
+        public object Initialize(string viewModelAssemblyPath)
         {
-            var assembly = Assembly.LoadFile(assemblyPath);
+            Assembly viewModelAssembly;
+            try
+            {
+                viewModelAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(viewModelAssemblyPath);
+            }
+            catch
+            {
+                // Assembly may already be loaded
+                viewModelAssembly = Assembly.Load(new AssemblyName(Path.GetFileNameWithoutExtension(viewModelAssemblyPath)));
+            }
 
-            viewModelRepo = new ViewModelRepository(assembly);
+            this.viewModelRepo = new ViewModelRepository(viewModelAssembly);
 
             return string.Empty;
         }

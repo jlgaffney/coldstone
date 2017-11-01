@@ -6,7 +6,7 @@ namespace Electron.Edge.Mvvm
 {
     public class ViewModelRepository
     {
-        private static readonly Dictionary<string, ViewModel> ViewModels = new Dictionary<string, ViewModel>();
+        private readonly Dictionary<string, ViewModel> viewModels = new Dictionary<string, ViewModel>();
 
         private readonly Assembly assembly;
 
@@ -18,9 +18,15 @@ namespace Electron.Edge.Mvvm
         public ViewModel Create(string name)
         {
             var type = assembly.GetType(name);
+
+            if (type == null)
+            {
+                throw new Exception("ViewModel type \"" + name + "\" is not in assembly!");
+            }
+
             var instance = Activator.CreateInstance(type);
             var vm = new ViewModel(instance);
-            ViewModels[vm.GetHashCode().ToString()] = vm;
+            viewModels[vm.GetHashCode().ToString()] = vm;
             return vm;
         }
 
@@ -31,14 +37,14 @@ namespace Electron.Edge.Mvvm
 
         public void Add(ViewModel vm)
         {
-            ViewModels[vm.GetHashCode().ToString()] = vm;
+            viewModels[vm.GetHashCode().ToString()] = vm;
         }
 
         public ViewModel GetViewModel(string id)
         {
-            if (!ViewModels.ContainsKey(id)) return null;
+            if (!viewModels.ContainsKey(id)) return null;
 
-            return ViewModels[id];
+            return viewModels[id];
         }
     }
 }
