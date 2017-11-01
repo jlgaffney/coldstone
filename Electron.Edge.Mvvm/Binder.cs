@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Electron.Edge.Mvvm
 {
-    public class EdgeBinder
+    public class Binder
     {
         private static BinderCore binder;
 
@@ -14,7 +14,7 @@ namespace Electron.Edge.Mvvm
             return SyncTask(() =>
             {
                 var result = binder.Initialize(obj.path);
-                return EdgeResult.Ok(result);
+                return Result.Ok(result);
             });
         }
 
@@ -62,11 +62,11 @@ namespace Electron.Edge.Mvvm
                 try
                 {
                     var result = function.Invoke();
-                    return EdgeResult.Ok(result);
+                    return Result.Ok(result);
                 }
                 catch (Exception ex)
                 {
-                    return EdgeResult.NotOk(ex.Message);
+                    return Result.NotOk(ex.Message);
                 }
             });
         }

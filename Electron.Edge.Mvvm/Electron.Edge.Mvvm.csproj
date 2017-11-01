@@ -36,8 +36,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinderCore.cs" />
-    <Compile Include="EdgeBinder.cs" />
-    <Compile Include="EdgeResult.cs" />
+    <Compile Include="Binder.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel.cs" />
     <Compile Include="ViewModelRepository.cs" />
