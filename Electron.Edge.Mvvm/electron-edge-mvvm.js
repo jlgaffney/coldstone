@@ -1,73 +1,73 @@
-var edge = require('electron-edge');
-var path = require('path');
+var edge = require("electron-edge");
+var path = require("path");
 
 module.exports = function (pathToDll) {
     var self = this;
-    var _dirName = path.dirname(pathToDll);
+    var dirName = path.dirname(pathToDll);
 
-    var _eb = (function () {
+    var edgeMvvmBase = (function () {
 
         //public Task<object> Initialize(dynamic obj);
-        var _initialize = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
+        var initialize = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "Initialize"
         });
 
         //public Task<object> CreateViewModel(dynamic obj);
-        var _createViewModel = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
+        var createViewModel = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "CreateViewModel"
         });
 
         //public Task<object> GetPropertyValue(dynamic obj);
-        var _getPropertyValue = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
+        var getPropertyValue = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "GetPropertyValue"
         });
 
-        //public Task<object> GetPropertyAsViewModel(dynamic obj);
-        var _getPropertyAsViewModel = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
-            methodName: "GetPropertyAsViewModel"
-        });
-
         //public Task<object> SetPropertyValue(dynamic obj);
-        var _setPropertyValue = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
+        var setPropertyValue = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "SetPropertyValue"
         });
 
         //public Task<object> BindToProperty(dynamic obj);
-        var _bindToProperty = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
+        var bindToProperty = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "BindToProperty"
         });
 
         //public Task<object> ExecuteCommand(dynamic obj);
-        var _executeCommand = edge.func({
-            assemblyFile: _dirName + "/Electron.Edge.Mvvm.dll",
-            typeName: 'Electron.Edge.Mvvm.Binder',
+        var executeCommand = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "ExecuteCommand"
         });
 
+        //public Task<object> GetPropertyAsViewModel(dynamic obj);
+        var getPropertyAsViewModel = edge.func({
+            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            typeName: "Electron.Edge.Mvvm.Binder",
+            methodName: "GetPropertyAsViewModel"
+        });
+
         return {
-            initialize: _initialize,
-            createViewModel: _createViewModel,
-            getPropertyValue: _getPropertyValue,
-            setPropertyValue: _setPropertyValue,
-            bindToProperty: _bindToProperty,
-            executeCommand: _executeCommand,
-            getPropertyAsViewModel: _getPropertyAsViewModel
+            initialize: initialize,
+            createViewModel: createViewModel,
+            getPropertyValue: getPropertyValue,
+            setPropertyValue: setPropertyValue,
+            bindToProperty: bindToProperty,
+            executeCommand: executeCommand,
+            getPropertyAsViewModel: getPropertyAsViewModel
         };
     })();
 
-    function check(result) {
+    function checkResult(result) {
         if (!result.ok) {
             throw result.result;
         } else {
@@ -75,11 +75,10 @@ module.exports = function (pathToDll) {
         }
     };
 
-    try {
-        var result = check(_eb.initialize({ path: pathToDll }, true));
-    }
-    catch (err) {
-        throw "Initialization failed!" + err;
+    var result = edgeMvvmBase.initialize({ path: pathToDll }, true);
+
+    if (!result.ok) {
+        throw "Initialization failed! " + result.result;
     }
 
     var ViewModel = function (id) {
@@ -87,7 +86,7 @@ module.exports = function (pathToDll) {
         var _id = id;
 
         self.bindInput = function (propertyName, node) {
-            check(_eb.bindToProperty({
+            checkResult(edgeMvvmBase.bindToProperty({
                 id: _id,
                 property: propertyName,
                 onChanged: function (input, callback) {
@@ -96,25 +95,25 @@ module.exports = function (pathToDll) {
                 }
             }, true));
 
-            _eb.getPropertyValue({ id: _id, property: propertyName }, function (err, result) {
-                node.value = check(result);
+            edgeMvvmBase.getPropertyValue({ id: _id, property: propertyName }, function (err, result) {
+                node.value = checkResult(result);
             });
 
             node.addEventListener("input", function (e) {
-                _eb.setPropertyValue({ id: _id, property: propertyName, value: node.value },
-                function (err, result) { check(result); });
+                edgeMvvmBase.setPropertyValue({ id: _id, property: propertyName, value: node.value },
+                function (err, result) { checkResult(result); });
             });
         };
 
         self.bindCommand = function (commandName, node) {
             node.addEventListener("click", function (e) {
-                _eb.executeCommand({ id: _id, command: commandName },
-                function (err, result) { check(result); });
+                edgeMvvmBase.executeCommand({ id: _id, command: commandName },
+                function (err, result) { checkResult(result); });
             });
         };
 
         self.bindText = function (propertyName, node) {
-            _eb.bindToProperty({
+            edgeMvvmBase.bindToProperty({
                 id: _id,
                 property: propertyName,
                 onChanged: function (input, callback) {
@@ -123,13 +122,13 @@ module.exports = function (pathToDll) {
                 }
             }, true);
 
-            _eb.getPropertyValue({ id: _id, property: propertyName }, function (err, result) {
-                node.innerText = check(result);
+            edgeMvvmBase.getPropertyValue({ id: _id, property: propertyName }, function (err, result) {
+                node.innerText = checkResult(result);
             });
         };
 
         self.getChildAsViewModel = function (propertyName) {
-            return new ViewModel(check(_eb.getPropertyAsViewModel({ id: _id, property: propertyName }, true)));
+            return new ViewModel(checkResult(edgeMvvmBase.getPropertyAsViewModel({ id: _id, property: propertyName }, true)));
         }
     };
 
@@ -146,25 +145,25 @@ module.exports = function (pathToDll) {
 
     self.bind = function (idOrNode, typeOrVM) {
 
-        var vm = null;
+        var viewModel = null;
         var root = null;
         if (typeof idOrNode === "string") {
-            var vm = new ViewModel(check(_eb.createViewModel({ name: typeOrVM }, true)));
-            var root = document.getElementById(idOrNode);
+            viewModel = new ViewModel(checkResult(edgeMvvmBase.createViewModel({ name: typeOrVM }, true)));
+            root = document.getElementById(idOrNode);
         } else {
-            var vm = typeOrVM;
+            viewModel = typeOrVM;
             root = idOrNode;
         }
 
-        var skip_children = [];
+        var skipChildren = [];
         var bindings = root.querySelectorAll("[data-bind]");
 
         for (var i = 0; i < bindings.length; i++) {
             var node = bindings[i];
 
             var skip = false;
-            for (var j = 0; j < skip_children.length; j++) {
-                if (isDescendant(skip_children[j], node)) {
+            for (var j = 0; j < skipChildren.length; j++) {
+                if (isDescendant(skipChildren[j], node)) {
                     skip = true;
                 }
             }
@@ -173,19 +172,19 @@ module.exports = function (pathToDll) {
                 continue;
 
             var binding = node.dataset.bind;
-            var bindingParts = binding.split(' ');
+            var bindingParts = binding.split(" ");
             var bindingType = bindingParts[0];
             var propertyName = bindingParts[1];
             if (bindingType === "value:") {
-                vm.bindInput(propertyName, node);
+                viewModel.bindInput(propertyName, node);
             } else if (bindingType === "command:") {
-                vm.bindCommand(propertyName, node);
+                viewModel.bindCommand(propertyName, node);
             } else if (bindingType === "text:") {
-                vm.bindText(propertyName, node);
+                viewModel.bindText(propertyName, node);
             } else if (bindingType === "with:") {
-                var child = vm.getChildAsViewModel(propertyName);
+                var child = viewModel.getChildAsViewModel(propertyName);
                 self.bind(node, child);
-                skip_children.push(node);
+                skipChildren.push(node);
             }
         }
     };
