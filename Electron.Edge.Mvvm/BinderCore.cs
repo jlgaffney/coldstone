@@ -10,6 +10,7 @@ namespace Electron.Edge.Mvvm
     {
         private const string DynamicLinkLibraryExtension = "dll";
 
+        private AssemblyLoader assemblyLoader;
         private ViewModelRepository viewModelRepo;
 
         public BinderCore()
@@ -28,15 +29,20 @@ namespace Electron.Edge.Mvvm
 
         public object Initialize(string viewModelAssemblyPath)
         {
+            var viewModelAssemblyDirectory = Path.GetDirectoryName(viewModelAssemblyPath);
+
+            this.assemblyLoader = new AssemblyLoader(viewModelAssemblyDirectory);
+
+            var viewModelAssemblyName = AssemblyLoadContext.GetAssemblyName(viewModelAssemblyPath);
+
             Assembly viewModelAssembly;
             try
             {
-                viewModelAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(viewModelAssemblyPath);
+                viewModelAssembly = this.assemblyLoader.LoadFromAssemblyName(viewModelAssemblyName);
             }
-            catch
+            catch (Exception ex)
             {
-                // Assembly may already be loaded
-                viewModelAssembly = Assembly.Load(new AssemblyName(Path.GetFileNameWithoutExtension(viewModelAssemblyPath)));
+                throw new Exception("ViewModel assembly could not be loaded! Initialization failed!", ex);
             }
 
             this.viewModelRepo = new ViewModelRepository(viewModelAssembly);

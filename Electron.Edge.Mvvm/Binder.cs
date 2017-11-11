@@ -11,11 +11,7 @@ namespace Electron.Edge.Mvvm
         {
             binder = new BinderCore();
 
-            return SyncTask(() =>
-            {
-                var result = binder.Initialize(obj.path);
-                return Result.Ok(result);
-            });
+            return SyncTask(() => binder.Initialize(obj.path));
         }
 
         public Task<object> CreateViewModel(dynamic obj)
