@@ -5,7 +5,8 @@ namespace Electron.Edge.Mvvm.Tests
 {
     public class BinderTests
     {
-        private const string TestExampleAssemblyPath = "C:\\Users\\jg\\dev\\src\\crypto\\neo\\personal_repos\\neo-gui-x\\electron\\lib\\Neo.UI.ViewModels.dll";
+        // TODO Add test assembly for tests to try load
+        private const string TestExampleAssemblyPath = "";
         
         [Fact(DisplayName = "Initialize_Successful")]
         [Trait("Binder", "Initialization")]
