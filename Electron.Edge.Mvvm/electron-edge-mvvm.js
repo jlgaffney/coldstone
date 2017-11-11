@@ -1,4 +1,4 @@
-var edge = require("electron-edge");
+var edge = require("electron-edge-js");
 var path = require("path");
 
 module.exports = function (pathToDll) {
@@ -75,10 +75,15 @@ module.exports = function (pathToDll) {
         }
     };
 
-    var result = edgeMvvmBase.initialize({ path: pathToDll }, true);
+    var result = edgeMvvmBase.initialize({ path: pathToDll }, function (error, result) {
+        if (error) {
+            throw "Initialization failed! " + error;
+        }
+    });
 
     if (!result.ok) {
-        throw "Initialization failed! " + result.result;
+        var errorMsg = "Initialization failed! " + result.result;
+        throw errorMsg;
     }
 
     var ViewModel = function (id) {
@@ -101,14 +106,14 @@ module.exports = function (pathToDll) {
 
             node.addEventListener("input", function (e) {
                 edgeMvvmBase.setPropertyValue({ id: _id, property: propertyName, value: node.value },
-                function (err, result) { checkResult(result); });
+                    function (err, result) { checkResult(result); });
             });
         };
 
         self.bindCommand = function (commandName, node) {
             node.addEventListener("click", function (e) {
                 edgeMvvmBase.executeCommand({ id: _id, command: commandName },
-                function (err, result) { checkResult(result); });
+                    function (err, result) { checkResult(result); });
             });
         };
 
