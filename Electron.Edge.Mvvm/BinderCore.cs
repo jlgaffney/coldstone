@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
@@ -8,41 +7,18 @@ namespace Electron.Edge.Mvvm
 {
     public class BinderCore
     {
-        private const string DynamicLinkLibraryExtension = "dll";
-
-        private AssemblyLoader assemblyLoader;
         private ViewModelRepository viewModelRepo;
-
-        public BinderCore()
-        {
-            AssemblyLoadContext.Default.Resolving += TryLoadFromSameFolder;
-        }
-
-        private static Assembly TryLoadFromSameFolder(AssemblyLoadContext context, AssemblyName assemblyName)
-        {
-            var folderPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-
-            var assemblyPath = Path.Combine(folderPath, assemblyName.Name + "." + DynamicLinkLibraryExtension);
-
-            return File.Exists(assemblyPath) ? context.LoadFromAssemblyPath(assemblyPath) : null;
-        }
 
         public object Initialize(string viewModelAssemblyPath)
         {
-            var viewModelAssemblyDirectory = Path.GetDirectoryName(viewModelAssemblyPath);
-
-            this.assemblyLoader = new AssemblyLoader(viewModelAssemblyDirectory);
-
-            var viewModelAssemblyName = AssemblyLoadContext.GetAssemblyName(viewModelAssemblyPath);
-
             Assembly viewModelAssembly;
             try
             {
-                viewModelAssembly = this.assemblyLoader.LoadFromAssemblyName(viewModelAssemblyName);
+                viewModelAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(viewModelAssemblyPath);
             }
             catch (Exception ex)
             {
-                throw new Exception("ViewModel assembly could not be loaded! Initialization failed!", ex);
+                throw new Exception("Initialization failed! ViewModel assembly could not be loaded at " + viewModelAssemblyPath + "!", ex);
             }
 
             this.viewModelRepo = new ViewModelRepository(viewModelAssembly);
