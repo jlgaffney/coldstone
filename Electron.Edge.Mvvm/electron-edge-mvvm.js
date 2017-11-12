@@ -1,57 +1,55 @@
 var edge = require("electron-edge-js");
-var path = require("path");
 
 module.exports = function (pathToDll) {
     var self = this;
-    var dirName = path.dirname(pathToDll);
 
     var edgeMvvmBase = (function () {
 
         //public Task<object> Initialize(dynamic obj);
         var initialize = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "Initialize"
         });
 
         //public Task<object> CreateViewModel(dynamic obj);
         var createViewModel = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "CreateViewModel"
         });
 
         //public Task<object> GetPropertyValue(dynamic obj);
         var getPropertyValue = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "GetPropertyValue"
         });
 
         //public Task<object> SetPropertyValue(dynamic obj);
         var setPropertyValue = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "SetPropertyValue"
         });
 
         //public Task<object> BindToProperty(dynamic obj);
         var bindToProperty = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "BindToProperty"
         });
 
         //public Task<object> ExecuteCommand(dynamic obj);
         var executeCommand = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "ExecuteCommand"
         });
 
         //public Task<object> GetPropertyAsViewModel(dynamic obj);
         var getPropertyAsViewModel = edge.func({
-            assemblyFile: dirName + "/Electron.Edge.Mvvm.dll",
+            assemblyFile: "Electron.Edge.Mvvm.dll",
             typeName: "Electron.Edge.Mvvm.Binder",
             methodName: "GetPropertyAsViewModel"
         });

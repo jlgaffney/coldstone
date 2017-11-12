@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ namespace Electron.Edge.Mvvm
 
         public object Initialize(string viewModelAssemblyPath)
         {
+            // Absolute path may be required
+            viewModelAssemblyPath = Path.GetFullPath(viewModelAssemblyPath);
+
             Assembly viewModelAssembly;
             try
             {
